@@ -1,11 +1,28 @@
 from settings import *
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups):
+class Entity(pygame.sprite.Sprite):
+    def __init__(self, pos, frames, groups):
         super().__init__(groups)
-        self.image = pygame.Surface((100,100))
-        self.image.fill('red')
-        self.rect = self.image.get_frect(topleft = pos)
+
+        # graphics
+        self.frame_index, self.frames = 0, frames
+
+        # sprite setup
+        self.image = self.frames[self.get_state()][self.frame_index]
+        self.rect = self.image.get_frect(center = pos)
+
+    def animate(self, dt):
+        self.frame_index += ANIMATION_SPEED * dt
+        self.image = self.frames[self.get_state()][int(self.frame_index % len(self.frames[self.get_state()]))]
+
+    def get_state(self):
+        # logic
+        return 'right'
+
+
+class Player(Entity):
+    def __init__(self, pos, frames, groups):
+        super().__init__(pos, frames, groups)
 
         self.direction = vector()
 
