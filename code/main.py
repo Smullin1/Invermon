@@ -2,7 +2,7 @@ from settings import *
 from pytmx.util_pygame import load_pygame
 from os.path import join
 
-from sprites import Sprite, AnimatedSprite
+from sprites import Sprite, AnimatedSprite, MonsterPatchSprite
 from entities import Player, Character
 from groups import AllSprites
 
@@ -46,14 +46,14 @@ class Game:
                 for y in range(int(obj.y), int(obj.y + obj.height), TILE_SIZE):
                     AnimatedSprite((x,y), self.overworld_frames['water'], self.all_sprites,  WORLD_LAYERS['water'])
         
-        #coast
+        # coast
         for obj in tmx_map.get_layer_by_name('Coast'): 
             terrain = obj.properties['terrain']
             side = obj.properties['side']
             AnimatedSprite((obj.x, obj.y), self.overworld_frames['coast'][terrain][side], self.all_sprites, WORLD_LAYERS['bg'])
 
 
-        #objects
+        # objects
         for obj in tmx_map.get_layer_by_name('Objects'):
             if obj.name == 'top':
                 Sprite((obj.x,obj.y), obj.image, self.all_sprites, WORLD_LAYERS['top'])
@@ -62,7 +62,7 @@ class Game:
         
         # grass patches
         for obj in tmx_map.get_layer_by_name('Monsters'):
-            Sprite((obj.x, obj.y), obj.image, self.all_sprites)
+            MonsterPatchSprite((obj.x, obj.y), obj.image, self.all_sprites, obj.properties['biome'])
 
         #entities
         for obj in tmx_map.get_layer_by_name('Entities'):
